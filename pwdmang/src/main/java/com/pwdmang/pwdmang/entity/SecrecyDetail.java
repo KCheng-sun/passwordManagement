@@ -4,6 +4,7 @@ import java.sql.Date;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.ToString;
@@ -30,7 +31,9 @@ public class SecrecyDetail {
 
   private String bindEmail;
 
+  @JsonIgnore
   private Date createdTime;
 
+  @JsonIgnore
   private Date updateTime;
 }
