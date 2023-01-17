@@ -15,7 +15,7 @@ import com.pwdmang.pwdmang.service.SecrecyDetailService;
 
 @RestController
 @RequestMapping("/secrecyDetails")
-public class SecrecyDetailController {
+public class SecrecyDetailController extends BaseController {
 
   @Autowired
   SecrecyDetailService secrecyDetailService;

@@ -1,6 +1,6 @@
 package com.pwdmang.pwdmang.entity;
 
-import java.sql.Date;
+import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;

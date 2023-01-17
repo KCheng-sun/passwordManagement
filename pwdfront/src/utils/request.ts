@@ -38,7 +38,19 @@ export class Request {
 			...config,
 		})
 
-	// 不经过统一的axios实例的get请求
+	public put = (url: string, data: any = {}, config: AxiosRequestConfig = {}): Promise<any> =>
+		this.instance({
+			...{ url, method: 'put', data },
+			...config,
+		})
+
+	public delete = (url: string, data: any = {}, config: AxiosRequestConfig = {}): Promise<any> =>
+		this.instance({
+			...{ url, method: 'delete', data },
+			...config,
+		})
+
+	// 不经过统一的axios实例的post请求
 	public postOnly = (url: string, data: any = {}, config: AxiosRequestConfig = {}) =>
 		axios({
 			...this.baseConfig,
@@ -46,7 +58,7 @@ export class Request {
 			...config,
 		})
 
-	// 不经过统一的axios实例的post请求
+	// 不经过统一的axios实例的get请求
 	public getOnly = (url: string, data: any = {}, config: AxiosRequestConfig = {}) =>
 		axios({
 			...this.baseConfig,
@@ -86,7 +98,7 @@ export class Request {
 		this.instance.interceptors.response.use(
 			res => {
 				const { code, data, msg } = res.data
-				if (code === 200) {
+				if (code === 200 || code === '20000') {
 					return data
 				}
 				$message.error(msg || '获取数据失败')

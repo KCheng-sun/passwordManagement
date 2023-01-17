@@ -8,7 +8,7 @@ const roleList: any = constantMng.formatGroup('role', 'value', 'label')
 
 const formItemLayout = {
 	labelCol: { span: 4 },
-	wrapperCol: { span: 20 }
+	wrapperCol: { span: 20 },
 }
 
 interface IProps {
@@ -21,28 +21,28 @@ const Edit: React.FC<IProps> = props => {
 	const { id, visible, onClose } = props
 	// 提交时的loading状态
 	// const [loading, setLoading] = useState(false)
-	const [detail, setDetail] = useState({
-		name: '',
-		age: '',
-		gender: '',
-		role: []
-	})
+	const [form] = Form.useForm<{ mobile: string; password: string }>()
 
 	// 获取用户详情
 	useEffect(() => {
 		if (!id) return
 		service.getUserDetail(id).then(res => {
-			setDetail(res)
+			form.setFieldsValue({ mobile: res.mobile, password: res.password })
 		})
-	}, [id])
+	}, [form, id])
 
-	const handleSubmit = () => {
+	const handleSubmit = (values: any) => {
 		if (id) {
-			$message.success('修改成功')
+			service.updateUser(id, values).then(res => {
+				$message.success('修改成功')
+				onClose()
+			})
 		} else {
-			$message.success('新增成功')
+			service.addUser(values).then(res => {
+				$message.success('新增成功11')
+				onClose()
+			})
 		}
-		onClose()
 	}
 
 	const handleFinishFailed = () => {
@@ -65,67 +65,32 @@ const Edit: React.FC<IProps> = props => {
 				{...formItemLayout}
 				onFinish={handleSubmit}
 				onFinishFailed={handleFinishFailed}
+				form={form}
 			>
 				<Form.Item
-					label="姓名"
-					name="name"
-					initialValue={detail.name}
+					label="手机号"
+					name="mobile"
 					rules={[
 						{
 							required: true,
-							message: '请输入用户姓名!'
-						}
+							message: '请输入用户手机号!',
+						},
 					]}
 				>
-					<Input placeholder="请输入姓名" />
+					<Input placeholder="请输入手机号" />
 				</Form.Item>
 
 				<Form.Item
-					label="年龄"
-					name="age"
-					initialValue={detail.age}
+					label="密码"
+					name="password"
 					rules={[
 						{
 							required: true,
-							message: '请输入用户年龄!'
-						}
+							message: '请输入密码!',
+						},
 					]}
 				>
-					<Input placeholder="请输入年龄" />
-				</Form.Item>
-
-				<Form.Item
-					label="性别"
-					name="gender"
-					initialValue={detail.gender}
-					rules={[
-						{
-							required: true,
-							message: '请选择用户性别!'
-						}
-					]}
-				>
-					<Radio.Group>
-						{genderList.map(item => (
-							<Radio key={item.id} value={item.id}>
-								{item.name}
-							</Radio>
-						))}
-					</Radio.Group>
-				</Form.Item>
-
-				<Form.Item
-					label="角色"
-					name="role"
-					initialValue={detail.role}
-					rules={[
-						{
-							required: true,
-							message: '请至少选择一个用户角色!'
-						}
-					]}
-				>
-					<Checkbox.Group options={roleList} />
+					<Input placeholder="请输入密码" />
 				</Form.Item>
 
 				<Form.Item wrapperCol={{ offset: 8 }}>

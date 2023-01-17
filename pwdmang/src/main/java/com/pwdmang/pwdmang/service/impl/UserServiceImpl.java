@@ -1,11 +1,13 @@
 package com.pwdmang.pwdmang.service.impl;
 
+import java.util.Date;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pwdmang.pwdmang.dao.UserDao;
 import com.pwdmang.pwdmang.entity.User;
@@ -27,6 +29,26 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
       return user.getId();
     }
     return null;
+  }
+
+  @Override
+  public Page<User> page(Integer page, Integer size) {
+    Page<User> pageObj = new Page<User>(page, size);
+    Page<User> userPage = userDao.selectPage(pageObj, null);
+    return userPage;
+  }
+
+  @Override
+  public void add(User user) {
+    user.setCreatedTime(new Date());
+    user.setUpdateTime(new Date());
+    baseMapper.insert(user);
+  }
+
+  @Override
+  public void change(User user) {
+    user.setUpdateTime(new Date());
+    baseMapper.updateById(user);
   }
 
 }

@@ -13,7 +13,7 @@ const User = () => {
 	// 查询参数
 	const [params, setParams] = useState<IParams>({
 		pageNumber: 1,
-		pageSize: 10
+		pageSize: 10,
 	})
 	// 表格当前页显示的数据
 	const [list, setList] = useState<IUser[]>([])
@@ -59,25 +59,25 @@ const User = () => {
 
 	// 单个删除
 	const handleDeleteSingle = async (record: IUser) => {
-		const { id, name } = record
+		const { id, mobile } = record
 		await service.deleteUser(id)
-		$message.success(`成功删除用户“${name}”！`)
-		//  getUserList()
+		$message.success(`成功删除用户“${mobile}”！`)
+		getUserList()
 	}
 
 	// 批量删除
 	const handleDeleteBatch = () => {
 		if (selectedRows.length > 0) {
 			const ids = selectedRows.map(row => row.id)
-			const names = selectedRows.map(row => row.name).join('，')
+			const names = selectedRows.map(row => row.mobile).join('，')
 			Modal.confirm({
 				title: '确认删除以下用户吗?',
 				content: names,
 				onOk: async () => {
-					await service.deleteUser(ids)
+					// await service.deleteUser(ids)
 					$message.success(`成功删除用户“${names}”！`)
 					//  getUserList()
-				}
+				},
 			})
 		} else {
 			$message.warning('请选择要删除的用户')
@@ -91,6 +91,7 @@ const User = () => {
 
 	// 取消
 	const handleClose = () => {
+		getUserList()
 		setEditVisible(false)
 	}
 
@@ -128,7 +129,7 @@ const User = () => {
 					showQuickJumper: true,
 					showSizeChanger: true,
 					showTotal: total => `共${total}个用户`,
-					onChange: handlePagination
+					onChange: handlePagination,
 				}}
 			>
 				<Column
@@ -137,9 +138,9 @@ const User = () => {
 					width={80}
 					render={(value, record, index) => (params.pageNumber - 1) * params.pageSize + index + 1}
 				/>
-				<Column title="姓名" dataIndex="name" />
-				<Column title="年龄" dataIndex="age" />
-				<Column title="性别" dataIndex="gender" render={value => constantMng.getNameById('gender', value)} />
+				<Column title="手机号" dataIndex="mobile" />
+				<Column title="密码" dataIndex="password" />
+				<Column title="创建时间" dataIndex="createdTime" />
 				<Column<IUser>
 					title="操作"
 					dataIndex="operate"

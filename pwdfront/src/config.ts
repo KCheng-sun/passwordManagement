@@ -9,7 +9,7 @@ const CONFIG_BASE = {
 
 // 开发配置
 const CONFIG_DEV = {
-	domain: 'http://api'
+	domain: 'http://127.0.0.1:8080/server'
 }
 
 // 测试配置
